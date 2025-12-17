@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>我的在线测试环境</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    
+    <!-- 自定义CSS样式 -->
+    <style>
+        /* 全局样式 */
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        
+        /* 自定义导航栏 */
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: white !important;
+        }
+        
+        .nav-link {
+            color: rgba(255,255,255,0.9) !important;
+            margin: 0 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: white !important;
+            transform: translateY(-2px);
+        }
+        
+        /* 自定义容器 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* 页面标题 */
+        .page-title {
+            text-align: center;
+            margin: 40px 0;
+            color: #495057;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        /* 编辑器容器 */
+        .editor-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+        
+        .editor-title {
+            margin-bottom: 15px;
+            color: #667eea;
+            font-weight: 600;
+        }
+        
+        /* 自定义iframe样式 */
+        .custom-iframe {
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid #e9ecef;
+            transition: border-color 0.3s ease;
+        }
+        
+        .custom-iframe:hover {
+            border-color: #667eea;
+        }
+        
+        /* 语言选择器 */
+        .language-selector {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .lang-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            background-color: #e9ecef;
+            color: #495057;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .lang-btn:hover {
+            background-color: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .lang-btn.active {
+            background-color: #667eea;
+            color: white;
+        }
+        
+        /* 页脚 */
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 50px;
+            background-color: #343a40;
+            color: white;
+        }
+        
+        /* Redis命令参考样式 */
+        .redis-reference {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+            display: none;
+        }
+        
+        .redis-reference.active {
+            display: block;
+        }
+        
+        .redis-section {
+            margin-bottom: 25px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .redis-section h4 {
+            color: #dc3545;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .redis-section h5 {
+            color: #6c757d;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+        
+        .redis-commands {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .redis-command {
+            padding: 6px 12px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #495057;
+        }
+        
+        .redis-example {
+            background-color: #e9ecef;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #495057;
+            margin-bottom: 10px;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .language-selector {
+                justify-content: center;
+            }
+            
+            .editor-container {
+                padding: 15px;
+            }
+            
+            .redis-commands {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 自定义导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="custom-test-environment.html">💻 我的在线测试环境</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">我的代码</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">学习资源</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">关于</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容 -->
+    <div class="container">
+        <h1 class="page-title">🚀 欢迎使用我的在线测试环境</h1>
+        
+        <!-- 语言选择器 -->
+        <div class="language-selector">
+            <button class="lang-btn active" onclick="changeLanguage('python')">Python</button>
+            <button class="lang-btn" onclick="changeLanguage('javascript')">JavaScript</button>
+            <button class="lang-btn" onclick="changeLanguage('java')">Java</button>
+            <button class="lang-btn" onclick="changeLanguage('c')">C</button>
+            <button class="lang-btn" onclick="changeLanguage('c++')">C++</button>
+            <button class="lang-btn" onclick="changeLanguage('c#')">C#</button>
+            <button class="lang-btn" onclick="changeLanguage('php')">PHP</button>
+            <button class="lang-btn" onclick="changeLanguage('ruby')">Ruby</button>
+            <button class="lang-btn" onclick="changeLanguage('go')">Go</button>
+            <button class="lang-btn" onclick="changeLanguage('redis')">Redis</button>
+        </div>
+        
+        <!-- 编辑器容器 -->
+        <div class="editor-container">
+            <h3 class="editor-title">📝 代码编辑器</h3>
+            <iframe class="custom-iframe" frameBorder="0" height="600px" id="oc-editor" width="100%"
+                src="https://onecompiler.com/embed/python"></iframe>
+        </div>
+        
+        <!-- Redis命令参考 -->
+        <div class="redis-reference" id="redisReference">
+            <h3 class="editor-title">🔴 Redis 数据结构与常用命令</h3>
+            
+            <!-- 字符串类型 -->
+            <div class="redis-section">
+                <h4>📌 字符串 (String)</h4>
+                <p>最基本的键值对存储类型，可存储字符串、数字或二进制数据</p>
+                <h5>常用命令：</h5>
+                <div class="redis-commands">
+                    <span class="redis-command">SET key value</span>
+                    <span class="redis-command">GET key</span>
+                    <span class="redis-command">DEL key</span>
+                    <span class="redis-command">INCR key</span>
+                    <span class="redis-command">DECR key</span>
+                    <span class="redis-command">APPEND key value</span>
+                    <span class="redis-command">STRLEN key</span>
+                </div>
+                <h5>示例：</h5>
+                <div class="redis-example">
+                    SET name "Redis"
+                    GET name      # 返回 "Redis"
+                    INCR count    # 返回 1
+                    INCR count    # 返回 2
+                    APPEND name " Database"  # 返回 13
+                </div>
+            </div>
+            
+            <!-- 哈希类型 -->
+            <div class="redis-section">
+                <h4>📌 哈希 (Hash)</h4>
+                <p>存储字段和值的映射，适合存储对象</p>
+                <h5>常用命令：</h5>
+                <div class="redis-commands">
+                    <span class="redis-command">HSET key field value</span>
+                    <span class="redis-command">HGET key field</span>
+                    <span class="redis-command">HGETALL key</span>
+                    <span class="redis-command">HDEL key field</span>
+                    <span class="redis-command">HKEYS key</span>
+                    <span class="redis-command">HVALS key</span>
+                </div>
+                <h5>示例：</h5>
+                <div class="redis-example">
+                    HSET user:1 name "John"
+                    HSET user:1 age 30
+                    HGETALL user:1  # 返回所有字段和值
+                    HGET user:1 name  # 返回 "John"
+                </div>
+            </div>
+            
+            <!-- 列表类型 -->
+            <div class="redis-section">
+                <h4>📌 列表 (List)</h4>
+                <p>有序的字符串列表，可在两端进行元素操作</p>
+                <h5>常用命令：</h5>
+                <div class="redis-commands">
+                    <span class="redis-command">LPUSH key value</span>
+                    <span class="redis-command">RPUSH key value</span>
+                    <span class="redis-command">LPOP key</span>
+                    <span class="redis-command">RPOP key</span>
+                    <span class="redis-command">LRANGE key start stop</span>
+                    <span class="redis-command">LLEN key</span>
+                </div>
+                <h5>示例：</h5>
+                <div class="redis-example">
+                    LPUSH fruits "apple"
+                    LPUSH fruits "banana"
+                    RPUSH fruits "orange"
+                    LRANGE fruits 0 -1  # 返回 ["banana", "apple", "orange"]
+                </div>
+            </div>
+            
+            <!-- 集合类型 -->
+            <div class="redis-section">
+                <h4>📌 集合 (Set)</h4>
+                <p>无序的字符串集合，不允许重复元素</p>
+                <h5>常用命令：</h5>
+                <div class="redis-commands">
+                    <span class="redis-command">SADD key member</span>
+                    <span class="redis-command">SMEMBERS key</span>
+                    <span class="redis-command">SREM key member</span>
+                    <span class="redis-command">SISMEMBER key member</span>
+                    <span class="redis-command">SCARD key</span>
+                </div>
+                <h5>示例：</h5>
+                <div class="redis-example">
+                    SADD tags "programming"
+                    SADD tags "redis"
+                    SADD tags "database"
+                    SMEMBERS tags  # 返回 ["programming", "redis", "database"]
+                    SISMEMBER tags "redis"  # 返回 1 (存在)
+                </div>
+            </div>
+            
+            <!-- 有序集合类型 -->
+            <div class="redis-section">
+                <h4>📌 有序集合 (Sorted Set)</h4>
+                <p>有序的字符串集合，每个元素关联一个分数</p>
+                <h5>常用命令：</h5>
+                <div class="redis-commands">
+                    <span class="redis-command">ZADD key score member</span>
+                    <span class="redis-command">ZRANGE key start stop</span>
+                    <span class="redis-command">ZREM key member</span>
+                    <span class="redis-command">ZSCORE key member</span>
+                    <span class="redis-command">ZCOUNT key min max</span>
+                </div>
+                <h5>示例：</h5>
+                <div class="redis-example">
+                    ZADD leaderboard 100 "Alice"
+                    ZADD leaderboard 200 "Bob"
+                    ZADD leaderboard 150 "Charlie"
+                    ZRANGE leaderboard 0 -1 WITHSCORES  # 返回有序结果
+                </div>
+            </div>
+            
+            <!-- 通用命令 -->
+            <div class="redis-section">
+                <h4>📌 通用命令</h4>
+                <div class="redis-commands">
+                    <span class="redis-command">KEYS pattern</span>
+                    <span class="redis-command">EXISTS key</span>
+                    <span class="redis-command">TTL key</span>
+                    <span class="redis-command">EXPIRE key seconds</span>
+                    <span class="redis-command">FLUSHDB</span>
+                    <span class="redis-command">INFO</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 说明部分 -->
+        <div class="editor-container">
+            <h3 class="editor-title">📚 使用说明</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>✨ 功能特性</h5>
+                    <ul>
+                        <li>支持多种编程语言</li>
+                        <li>实时运行代码</li>
+                        <li>语法高亮显示</li>
+                        <li>代码自动补全</li>
+                        <li>响应式设计</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h5>💡 使用技巧</h5>
+                    <ul>
+                        <li>点击上方按钮切换编程语言</li>
+                        <li>在编辑器中编写代码</li>
+                        <li>点击"运行"按钮执行代码</li>
+                        <li>查看输出结果和错误信息</li>
+                        <li>保存代码以便下次使用</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 页脚 -->
+    <footer>
+        <p>&copy; 2024 我的在线测试环境 | 基于 OneCompiler 编辑器构建</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.slim.min.js"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"
+        integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js"
+        integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK"
+        crossorigin="anonymous"></script>
+    
+    <script>
+        // 切换编程语言
+        function changeLanguage(language) {
+            // 更新按钮状态
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // 更新编辑器
+            const editor = document.getElementById('oc-editor');
+            editor.src = `https://onecompiler.com/embed/${language}`;
+            
+            // 显示/隐藏Redis命令参考
+            const redisReference = document.getElementById('redisReference');
+            if (language === 'redis') {
+                redisReference.classList.add('active');
+            } else {
+                redisReference.classList.remove('active');
+            }
+        }
+        
+        // 页面加载完成后的初始化
+        window.addEventListener('load', function() {
+            console.log('我的在线测试环境已加载完成！');
+        });
+    </script>
+</body>
+
+</html>
